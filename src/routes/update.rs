@@ -1,5 +1,3 @@
-use std::future;
-
 use warp::{path, Filter, Rejection};
 
 pub fn build_route() -> impl Filter<Error = Rejection, Extract = (String,)> + Clone {
