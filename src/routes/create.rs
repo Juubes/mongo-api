@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use warp::{Filter, Future, Rejection};
+use warp::{Filter, Rejection};
 
 use crate::{data::data_handler, models::turtle::Turtle};
 
@@ -9,14 +9,10 @@ struct JsonData {
 }
 
 pub fn build_route() -> impl Filter<Extract = (String,), Error = Rejection> + Clone {
-    let route = warp::path!("create")
-        .and(warp::body::json().map(|turtle: Turtle| async {
-            let id = data_handler::create(turtle).await.unwrap();
-            println!("Turtle created");
-
-            return id;
-        }))
-        .then(|val| val);
-
-    route
+    warp::path!("create")
+        .and(
+            warp::body::json()
+                .map(|turtle: Turtle| async { data_handler::create(turtle).await.unwrap() }),
+        )
+        .then(|v| v)
 }
